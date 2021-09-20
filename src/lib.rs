@@ -40,16 +40,16 @@ pub fn process_instruction(
       .map(u64::from_le_bytes)
       .unwrap();
       
-    let description = String::from_utf8(rest_of_data[9..].to_vec()).unwrap();  //unwraps the rest of the byte data and turns into the campaign description    
+    let description = String::from_utf8(rest_of_data[9..].to_vec()).unwrap();  //unwraps the rest of the bytedata and turns into the campaign description    
 
     if *instruction_byte == 0 { //create campaign
-      let campaign_owner_account = next_account_info(accounts_iter)?;
-      let mut campaign_account_data = CampaignAccount::try_from_slice(&campaign_account.data.borrow())?;
-      campaign_account_data.campaign_owner = *campaign_owner_account.owner;
-      campaign_account_data.campaign_amount = amount;
-      campaign_account_data.campaign_description = description;
-      campaign_account_data.campaign_fulfilled = 0;
-      campaign_account_data.serialize(&mut &mut campaign_account.data.borrow_mut()[..])?;
+      let campaign_owner_account = next_account_info(accounts_iter)?; 
+      let mut campaign_account_data = CampaignAccount::try_from_slice(&campaign_account.data.borrow())?; // add CampaignAccount data to the mutable var campaign_account_data
+      campaign_account_data.campaign_owner = *campaign_owner_account.owner; // adding acc owner tot he data
+      campaign_account_data.campaign_amount = amount; // adding amount to the data
+      campaign_account_data.campaign_description = description; // adding description to the data
+      campaign_account_data.campaign_fulfilled = 0; // adding status to the data
+      campaign_account_data.serialize(&mut &mut campaign_account.data.borrow_mut()[..])?; //serialize the data and store it to the acc so that it stays
     }
 
     if *instruction_byte == 1 { //fund a campaign
