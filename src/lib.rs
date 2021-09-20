@@ -27,8 +27,8 @@ pub fn process_instruction(
     data: &[u8], // input/instructions
 ) -> ProgramResult {
    
-    let accounts_iter = &mut accounts.iter();
-    let campaign_account = next_account_info(accounts_iter)?;
+    let accounts_iter = &mut accounts.iter(); //get the account of the program caller 
+    let campaign_account = next_account_info(accounts_iter)?; //the 1st account in the array will be the owner of the campaign and can withdraw the funds later
 
     //To differentiate between the operation we want to execute, we’ll send an identifier in the data parameter.
 
