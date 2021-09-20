@@ -34,13 +34,13 @@ pub fn process_instruction(
 
     let (instruction_byte, rest_of_data) = data.split_first().unwrap(); //split the data to unwrap the input
 
-    let amount = rest_of_data
-      .get(..8)
+    let amount = rest_of_data //describes the amount needed by the campaign using the next 4 bytes after the first byte which is the operation code-
+      .get(..8) //
       .and_then(|slice| slice.try_into().ok())
       .map(u64::from_le_bytes)
       .unwrap();
       
-    let description = String::from_utf8(rest_of_data[9..].to_vec()).unwrap();      
+    let description = String::from_utf8(rest_of_data[9..].to_vec()).unwrap();  //unwraps the rest of the byte data and turns into the campaign description    
 
     if *instruction_byte == 0 { //create campaign
       let campaign_owner_account = next_account_info(accounts_iter)?;
