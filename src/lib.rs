@@ -1,8 +1,8 @@
-use borsh::{BorshDeserialize, BorshSerialize};
+use borsh::{BorshDeserialize, BorshSerialize}; // way to store this data on to the Solana Persistent Storage, is to serialize it
 use std::collections::HashMap;
 use std::convert::TryInto;
 
-use solana_program::{
+use solana_program::{ //solana crate 
     account_info::{next_account_info, AccountInfo},
     entrypoint,
     entrypoint::ProgramResult,
@@ -11,7 +11,7 @@ use solana_program::{
     pubkey::Pubkey,
 };
 
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
+#[derive(BorshSerialize, BorshDeserialize, Debug)] // tell compiler that the struct ProgramData can be serialized and deserialized using this library 
 pub struct CampaignAccount {
     pub campaign_owner: Pubkey,
     pub campaign_amount: u64,
@@ -19,7 +19,7 @@ pub struct CampaignAccount {
     pub campaign_fulfilled: u64,
 }
 
-entrypoint!(process_instruction);
+entrypoint!(process_instruction); // the entrypoint function to the program when someone wants to interact with it
 
 pub fn process_instruction(
     program_id: &Pubkey, // program identifier , needed to call the program and for solana to execute
@@ -45,18 +45,18 @@ pub fn process_instruction(
     if *instruction_byte == 0 { //create campaign
       let campaign_owner_account = next_account_info(accounts_iter)?; 
       let mut campaign_account_data = CampaignAccount::try_from_slice(&campaign_account.data.borrow())?; // add CampaignAccount data to the mutable var campaign_account_data
-      campaign_account_data.campaign_owner = *campaign_owner_account.owner; // adding acc owner tot he data
+      campaign_account_data.campaign_owner = *campaign_owner_account.owner; // adding acc owner to the data
       campaign_account_data.campaign_amount = amount; // adding amount to the data
       campaign_account_data.campaign_description = description; // adding description to the data
       campaign_account_data.campaign_fulfilled = 0; // adding status to the data
       campaign_account_data.serialize(&mut &mut campaign_account.data.borrow_mut()[..])?; //serialize the data and store it to the acc so that it stays
     }
 
-    if *instruction_byte == 1 { //fund a campaign
+    if *instruction_byte == 1 { 
       //get campaign status 
 
-      let mut campaign_account_data = CampaignAccount::try_from_slice(&campaign_account.data.borrow())?;
-      msg!("{}",campaign_account_data.campaign_amount - campaign_account_data.campaign_fulfilled);
+      let mut campaign_account_data = CampaignAccount::try_from_slice(&campaign_account.data.borrow())?; //from the campaign acc , get the data from the struct
+      msg!("{}",campaign_account_data.campaign_amount - campaign_account_data.campaign_fulfilled); // campaign goal minus the fund raised 
 
     }
 
