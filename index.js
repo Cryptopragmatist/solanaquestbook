@@ -1,9 +1,16 @@
 const {
     Connection,
+    TransactionInstruction,
+  Transaction,
+  sendAndConfirmTransaction,
+  PublicKey,
+  SystemProgram,
+  Keypair,
   } = require('@solana/web3.js'); // Import the appropriate module from web3.js
 
+const fs   = require('mz/fs');
 
-async function establishConnection() {
+async function establishConnection() { // fn to establish the connection
 
     const rpcUrl = 'http://api.devnet.solana.com'; //rpcUrl is the address at which your solana blockchain is running, constant variable
   
@@ -14,20 +21,20 @@ async function establishConnection() {
     console.log('Connection to cluster established:', rpcUrl, version); //printout the rpcURL and version to prompt cli that is has been established
   
 }
-async function createKeypairFromFile() {
-  const secretKeyString = await fs.readFile("~/.config/solana/id.json", {encoding: 'utf8'});
-  const secretKey = Uint8Array.from(JSON.parse(secretKeyString));
-  return Keypair.fromSecretKey(secretKey);
+async function createKeypairFromFile() { // create privatekey from file to sign all transactions associated with your account
+  const secretKeyString = await fs.readFile("~/.config/solana/id.json", {encoding: 'utf8'}); //read the private key file from local folder, it will be read as string 
+  const secretKey = Uint8Array.from(JSON.parse(secretKeyString)); //convert private key string to uint8 array
+  return Keypair.fromSecretKey(secretKey); // return the private key to the function caller, converting it into a Keypair using fromSecretKey
 }
 async function createAccount() {
 
-  const rpcUrl = 'http://localhost:8899';
+  const rpcUrl = 'http://api.devnet.solana.com';
   connection = new Connection(rpcUrl, 'confirmed');
-  const signer = await createKeypairFromFile();
-  const newAccountPubkey = await PublicKey.createWithSeed(
+  const signer = await createKeypairFromFile(); //create signer from your private key
+  const newAccountPubkey = await PublicKey.createWithSeed( // create a private key using seed phrase to create new account
     signer.publicKey,
     "campaign1",
-    new PublicKey("<ENTER PROGRAM ID HERE>"),
+    new PublicKey("<ENTER PROGRAM ID HERE>"), //program id ,PDA
   );
   const lamports = await connection.getMinimumBalanceForRentExemption(
     1024,
