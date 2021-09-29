@@ -1,0 +1,23 @@
+{
+  "name": "questbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cryptopragmatist/solanaquestbook.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cryptopragmatist/solanaquestbook/issues"
+  },
+  "homepage": "https://github.com/Cryptopragmatist/solanaquestbook#readme",
+  "dependencies": {
+    "@solana/web3.js": "^1.29.1",
+    "mz": "^2.7.0"
+  }
+}
