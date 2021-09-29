@@ -30,11 +30,11 @@ async function createAccount() {
 
   const rpcUrl = 'http://api.devnet.solana.com';
   connection = new Connection(rpcUrl, 'confirmed');
-  const signer = await createKeypairFromFile(); //create signer from your private key
-  const newAccountPubkey = await PublicKey.createWithSeed( // create a private key using seed phrase to create new account
+  const signer = await createKeypairFromFile(); //create campaign acc using our main acc(private key)
+  const newAccountPubkey = await PublicKey.createWithSeed( // create a private key using seed phrase to create new account, seed phrase can be used as a proxy private key of the new acc 
     signer.publicKey,
     "campaign1",
-    new PublicKey("<ENTER PROGRAM ID HERE>"), //program id ,PDA
+    new PublicKey("<ENTER PROGRAM ID HERE>"), //program id ,PDA. the new acc is associated with this program and will control the campaign acc
   );
   const lamports = await connection.getMinimumBalanceForRentExemption(
     1024,
