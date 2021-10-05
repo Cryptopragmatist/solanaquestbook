@@ -1,6 +1,6 @@
 const {
-    Connection,
-    TransactionInstruction,
+  Connection,
+  TransactionInstruction,
   Transaction,
   sendAndConfirmTransaction,
   PublicKey,
@@ -22,7 +22,7 @@ async function establishConnection() { // fn to establish the connection
   
 }
 async function createKeypairFromFile() { // create privatekey from file to sign all transactions associated with your account
-  const secretKeyString = await fs.readFile("~/.config/solana/id.json", {encoding: 'utf8'}); //read the private key file from local folder, it will be read as string 
+  const secretKeyString = await fs.readFile("/home/crypto1/.config/solana/id.json", {encoding: 'utf8'}); //read the private key file from local folder, it will be read as string 
   const secretKey = Uint8Array.from(JSON.parse(secretKeyString)); //convert private key string to uint8 array
   return Keypair.fromSecretKey(secretKey); // return the private key to the function caller, converting it into a Keypair using fromSecretKey
 }
@@ -34,7 +34,7 @@ async function createAccount() {
   const newAccountPubkey = await PublicKey.createWithSeed( // create a private key using seed phrase to create new account, seed phrase can be used as a proxy private key of the new acc 
     signer.publicKey,
     "campaign1",
-    new PublicKey("<ENTER PROGRAM ID HERE>"), //program id ,PDA. the new acc is associated with this program and will control the campaign acc
+    new PublicKey("EtqGHeto9RZDqbRJtxHT36Ngh2yG2xZm2QknWERqSaD1"), //program id ,PDA. the new acc is associated with this program and will control the campaign acc
   );
   const lamports = await connection.getMinimumBalanceForRentExemption( // get the minimum balance for rent exemption
     1024,
@@ -46,7 +46,7 @@ async function createAccount() {
     newAccountPubkey,// create an account via System program using this public key that is connected to the program using program ID
     lamports,
     space: 1024, //need to allocate space to store the data
-    programId : new PublicKey("<ENTER PROGRAM ID HERE>"),
+    programId : new PublicKey("EtqGHeto9RZDqbRJtxHT36Ngh2yG2xZm2QknWERqSaD1"),
   });
   const transaction = new Transaction().add( //execute instruction on the blockchain (transaction)
     instruction
